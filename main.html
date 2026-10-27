@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="tl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Algebra Solver</title>
+<style>
+:root{--bg:#f7f6f2;--card:#fff;--tx:#1d1d1b;--mu:#6b6a63;--ac:#2a5bd7;--bd:#e3e1d8;--er:#b3261e;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171716;--card:#232321;--tx:#ecebe5;--mu:#9a9990;--ac:#7ea3ff;--bd:#38372f;--er:#ff8a80;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#171716;--card:#232321;--tx:#ecebe5;--mu:#9a9990;--ac:#7ea3ff;--bd:#38372f;--er:#ff8a80;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:720px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:22px;margin:0 0 4px}p.sub{color:var(--mu);margin:0 0 16px;font-size:14px}
+input{width:100%;box-sizing:border-box;padding:14px;font:18px ui-monospace,Menlo,Consolas,monospace;border:1.5px solid var(--bd);border-radius:12px;background:var(--card);color:var(--tx)}
+input:focus{outline:2px solid var(--ac);border-color:var(--ac)}
+.row{display:flex;gap:8px;margin:10px 0;flex-wrap:wrap}
+button{font:inherit;border:1.5px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;padding:10px 16px;cursor:pointer}
+button.p{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:600}
+.chip{font-size:13px;padding:6px 10px;color:var(--mu)}
+.s{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px 14px;margin:10px 0}
+.t{font-weight:600;font-size:14px;color:var(--mu);margin-bottom:4px}
+.m{font:17px/1.6 ui-monospace,Menlo,Consolas,monospace;overflow-x:auto;white-space:pre-wrap}
+.ans{border:2px solid var(--ac)}.ans .t{color:var(--ac)}
+.er{color:var(--er);border-color:var(--er)}
+:root{--ink:#14213d;--g1:#4f46e5;--g2:#06b6d4;--sf:#fff;--ln:#e6e8f0;--mb:#f1f3fb}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#e8ebff;--sf:#1b1d2b;--ln:#2d3048;--mb:#242844;--bg:#10111a}}
+:root[data-theme="dark"]{--ink:#e8ebff;--sf:#1b1d2b;--ln:#2d3048;--mb:#242844;--bg:#10111a}
+body{background:radial-gradient(900px 380px at 50% -140px,color-mix(in srgb,var(--g1) 24%,transparent),transparent),var(--bg);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+main{padding-top:28px}
+.hero{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.logo{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--g1),var(--g2));color:#fff;font-size:26px;display:grid;place-items:center;box-shadow:0 8px 20px -6px var(--g1)}
+h1{font-size:28px;letter-spacing:-.02em;color:var(--ink);margin:0}
+.tag{color:var(--mu);font-size:14px}
+p.sub{color:var(--mu)}
+input{background:var(--sf);border:1.5px solid var(--ln);border-radius:16px;padding:18px;font-size:20px;box-shadow:0 10px 30px -18px rgba(20,33,61,.5)}
+input:focus{outline:none;border-color:var(--g1);box-shadow:0 0 0 4px color-mix(in srgb,var(--g1) 22%,transparent)}
+button{border-radius:12px;border:1.5px solid var(--ln);background:var(--sf);font-weight:600;transition:transform .1s}
+button:active{transform:scale(.97)}
+button.p{background:linear-gradient(135deg,var(--g1),var(--g2));border:0;color:#fff;padding:12px 20px;box-shadow:0 8px 20px -8px var(--g1)}
+.chip{border-radius:999px;font-weight:500;font-size:13px;padding:6px 12px;color:var(--mu)}
+.chip:hover{border-color:var(--g1);color:var(--g1)}
+.lbl{margin:22px 0 14px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
+.tl{border-left:2px dashed var(--ln);margin-left:16px;padding-left:28px}
+.s{position:relative;background:var(--sf);border:1px solid var(--ln);border-radius:16px;padding:14px 16px;margin:0 0 14px;box-shadow:0 1px 2px rgba(20,33,61,.06),0 10px 24px -14px rgba(20,33,61,.25)}
+.n{position:absolute;left:-46px;top:10px;width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--g1),var(--g2));color:#fff;font-weight:700;font-size:14px;display:grid;place-items:center;box-shadow:0 0 0 4px var(--bg)}
+.t{color:var(--ink);font-size:15px;font-weight:650;margin:0}
+.m{background:var(--mb);border-radius:10px;padding:9px 12px;margin-top:8px;font-size:16px;color:var(--ink)}
+.ans{border:0;background:linear-gradient(135deg,var(--g1),var(--g2));color:#fff;box-shadow:0 14px 30px -12px var(--g1)}
+.ans .t{color:#fff;opacity:.9}.ans .m{background:rgba(255,255,255,.18);color:#fff;font-size:21px;font-weight:600}
+.s.er{background:var(--sf);border:1.5px solid var(--er)}.er .t{color:var(--er)}
+:root{--bg:#fff7e8;--ink:#1b1740;--sf:#fff;--ln:#1b1740;--sh:#1b1740;--mb:#f1ecff;--pv:#6c3bff;--pk:#ff4f8b;--yl:#ffc233;--gr:#12b76a;--cy:#12a8e6;--mu:#5e5a85}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14112b;--ink:#f4f1ff;--sf:#211c47;--ln:#f4f1ff;--sh:#000;--mb:#2c2660;--mu:#b4aedf}}
+:root[data-theme="dark"]{--bg:#14112b;--ink:#f4f1ff;--sf:#211c47;--ln:#f4f1ff;--sh:#000;--mb:#2c2660;--mu:#b4aedf}
+body{background:var(--bg);color:var(--ink)}
+.hero{position:relative;overflow:hidden;background:var(--pv);color:#fff;border:3px solid var(--ln);border-radius:22px;padding:18px;box-shadow:6px 6px 0 var(--sh);margin-bottom:18px}
+.hero::after{content:"x² + 2x − 5 = 0";position:absolute;right:-4px;bottom:-6px;font:800 34px ui-monospace,monospace;color:rgba(255,255,255,.16);white-space:nowrap}
+@media(max-width:520px){.hero::after{display:none}}
+.hero h1{color:#fff;font-size:28px}.hero .tag{color:#e6dcff;font-weight:600}
+.logo{background:var(--yl);color:#1b1740;border:3px solid var(--ln);border-radius:14px;box-shadow:3px 3px 0 var(--sh)}
+p.sub{color:var(--mu);font-weight:500}
+input{border:3px solid var(--ln);border-radius:16px;background:var(--sf);color:var(--ink);box-shadow:5px 5px 0 var(--sh);padding:16px 18px}
+input:focus{outline:none;border-color:var(--pv);box-shadow:5px 5px 0 var(--pv)}
+button{border:3px solid var(--ln);border-radius:14px;background:var(--sf);color:var(--ink);font-weight:800;padding:11px 20px;box-shadow:0 4px 0 var(--sh);transition:transform .08s,box-shadow .08s}
+button:hover{transform:translateY(-2px);box-shadow:0 6px 0 var(--sh)}
+button:active{transform:translateY(4px);box-shadow:0 0 0 var(--sh)}
+button.p{background:var(--pk);background-image:none;color:#fff;border:3px solid var(--ln)}
+#fa{background:var(--yl);color:#1b1740}
+.lbl{display:inline-block;background:var(--yl);color:#1b1740;border:2px solid var(--ln);border-radius:999px;padding:4px 12px;font-size:12px;font-weight:800}
+.tl{border-left:3px solid var(--ln)}
+.s{background:var(--sf);border:3px solid var(--ln);border-radius:18px;box-shadow:5px 5px 0 var(--sh);padding:14px 16px}
+.n{background:var(--pv);border:3px solid var(--ln);box-shadow:none;left:-51px;top:8px;width:30px;height:30px}
+.tl .s:nth-child(4n+2) .n{background:var(--pk)}.tl .s:nth-child(4n+3) .n{background:var(--cy)}.tl .s:nth-child(4n) .n{background:var(--gr)}
+.t{font-weight:800;color:var(--ink)}
+.m{background:var(--mb);border:0;border-left:5px solid var(--pv);border-radius:10px;font-weight:600;color:var(--ink)}
+.tl .s:nth-child(4n+2) .m{border-left-color:var(--pk)}.tl .s:nth-child(4n+3) .m{border-left-color:var(--cy)}.tl .s:nth-child(4n) .m{border-left-color:var(--gr)}
+.s.ans{background:var(--gr);color:#fff;border:3px solid var(--ln)}.ans .t{color:#fff;opacity:1}
+.ans .m{background:rgba(255,255,255,.28);border-left:5px solid #fff;color:#fff;font-size:22px;font-weight:800}
+.s.er{background:var(--pk);border:3px solid var(--ln);color:#fff}.er .t{color:#fff}.er .m{background:rgba(0,0,0,.2);border-left-color:#fff;color:#fff}
+</style></head><body><main>
+<div class="hero"><div class="logo">∑</div><div><h1>Algebra Solver</h1><div class="tag">Step-by-step na solusyon sa bawat tanong</div></div></div>
+<p class="sub">I-type ang expression o equation, tapos pindutin ang I-solve. Ang mga letra pagkatapos ng ÷ o / ay kasama sa denominator (15x² ÷ 5x = 15x² / 5x).</p>
+<input id="q" placeholder="(6x + 8) − (2x + 3)" autocomplete="off" autocapitalize="off" spellcheck="false">
+<div class="row"><button class="p" id="go">I-solve / Pasimplehin</button><button id="fa">I-factor</button></div>
+
+<div id="out"></div>
+<script>
+const SUP='⁰¹²³⁴⁵⁶⁷⁸⁹',sup=n=>String(n).split('').map(c=>SUP[c]||c).join('');
+const gcd=(a,b)=>{a=Math.abs(a);b=Math.abs(b);while(b)[a,b]=[b,a%b];return a},lcm=(a,b)=>a/gcd(a,b)*b;
+const F=(n,d=1)=>{if(d<0){n=-n;d=-d}const g=gcd(n,d)||1;return{n:n/g,d:d/g}};
+const fa=(a,b)=>F(a.n*b.d+b.n*a.d,a.d*b.d),fm=(a,b)=>F(a.n*b.n,a.d*b.d),fng=a=>F(-a.n,a.d);
+const fi=a=>{if(!a.n)throw Error('Hindi puwedeng hatiin sa 0.');return F(a.d,a.n)};
+const mn=s=>String(s).replace('-','−'),fs=a=>mn(a.d==1?a.n:a.n+'/'+a.d),fv=a=>a.n/a.d,Z=F(0),O=F(1);
+const key=v=>Object.keys(v).sort().map(k=>k+v[k]).join(','),deg=t=>Object.values(t.v).reduce((s,e)=>s+e,0);
+const mt=(a,b)=>{const v={...a.v};for(const k in b.v)v[k]=(v[k]||0)+b.v[k];return{c:fm(a.c,b.c),v}};
+const mp=(A,B)=>A.flatMap(a=>B.map(b=>mt(a,b))),neg=t=>({c:fng(t.c),v:t.v});
+const C=P=>{const m=new Map();for(const t of P){const k=key(t.v);m.has(k)?m.get(k).c=fa(m.get(k).c,t.c):m.set(k,{c:t.c,v:t.v})}
+return[...m.values()].filter(t=>t.c.n).sort((a,b)=>deg(b)-deg(a)||(key(a.v)<key(b.v)?-1:1))};
+const ts=t=>{const ng=t.c.n<0,c=ng?fng(t.c):t.c,vs=Object.keys(t.v).sort().map(k=>k+(t.v[k]>1?sup(t.v[k]):'')).join('');
+return{ng,b:vs?(c.n==1&&c.d==1?'':c.d==1?c.n:'('+fs(c)+')')+vs:fs(c)}};
+const ps=P=>P.length?P.map((t,i)=>{const{ng,b}=ts(t);return i?(ng?' − ':' + ')+b:(ng?'−':'')+b}).join(''):'0';
+const one=[{c:O,v:{}}],cst=f=>[{c:f,v:{}}],isC=P=>P.length==1&&!Object.keys(P[0].v).length;
+const isOne=P=>isC(P)&&P[0].c.n==1&&P[0].c.d==1;
+const norm=(r,s)=>{let d=C(r.d);if(s&&d.length&&!isC(d)){r=simpR({n:r.n,d});d=C(r.d)}if(!d.length)throw Error('Hindi puwedeng hatiin sa 0.');
+if(isC(d)){const i=fi(d[0].c);return{n:r.n.map(t=>({c:fm(t.c,i),v:t.v})),d:one}}return{n:r.n,d}};
+const trim=a=>{while(a.length&&!a[a.length-1].n)a.pop();return a};
+const prem=(a,b)=>{a=a.slice();while(a.length>=b.length){const f=fm(a[a.length-1],fi(b[b.length-1])),s=a.length-b.length;for(let i=0;i<b.length;i++)a[s+i]=fa(a[s+i],fng(fm(f,b[i])));a.pop();trim(a)}return a};
+const pdiv=(a,b)=>{a=a.slice();const q=Array(Math.max(a.length-b.length+1,1)).fill(Z);while(a.length>=b.length){const f=fm(a[a.length-1],fi(b[b.length-1])),s=a.length-b.length;q[s]=f;for(let i=0;i<b.length;i++)a[s+i]=fa(a[s+i],fng(fm(f,b[i])));a.pop();trim(a)}return q};
+const pg=(a,b)=>{while(b.length)[a,b]=[b,prem(a,b)];return a};
+const tt=(c,v)=>c.map((x,k)=>({c:x,v:k?{[v]:k}:{}})).filter(t=>t.c.n);
+function simpR(r){let n=C(r.n),d=C(r.d);if(!n.length)return{n:[],d:one};
+const vs=[...new Set([...vars(n),...vars(d)])],m={};
+vs.forEach(x=>{const e=Math.min(...n.concat(d).map(t=>t.v[x]||0));if(e)m[x]=e});
+const dm=P=>P.map(t=>{const v={...t.v};for(const x in m){v[x]-=m[x];if(!v[x])delete v[x]}return{c:t.c,v}});
+n=dm(n);d=dm(d);
+if(!isC(d)&&vs.length==1){const v=vs[0],a=cf(n,v),b=cf(d,v);let g=pg(a,b);
+if(g.length>1){const L=g[g.length-1];g=g.map(c=>fm(c,fi(L)));n=tt(pdiv(a,g),v);d=tt(pdiv(b,g),v)}}
+if(!isC(d)){const kn=toIntC(n.map(t=>t.c).reverse()),kd=toIntC(d.map(t=>t.c).reverse()),ra=fm(kn.k,fi(kd.k));
+n=n.map((t,i)=>({c:fm(F(kn.ints[n.length-1-i]),ra),v:t.v}));d=d.map((t,i)=>({c:F(kd.ints[d.length-1-i]),v:t.v}))}
+return{n:C(n),d:C(d)}}
+const rs=r=>isOne(r.d)?ps(r.n):`(${ps(r.n)}) / (${ps(r.d)})`;
+function ev(a,cb){const E=x=>ev(x,cb),K=P=>cb?C(P):P;
+switch(a.t){
+case'n':return{n:cst(a.v),d:one};
+case'v':return{n:[{c:O,v:{[a.v]:1}}],d:one};
+case'neg':{const r=E(a.a);return{n:r.n.map(neg),d:r.d}}
+case'+':case'-':{const x=E(a.a);let y=E(a.b);if(a.t=='-')y={n:y.n.map(neg),d:y.d};
+if(ps(C(x.d))==ps(C(y.d)))return norm({n:K(x.n.concat(y.n)),d:x.d},cb);
+return norm({n:K(mp(x.n,y.d).concat(mp(y.n,x.d))),d:K(mp(x.d,y.d))},cb)}
+case'*':{const x=E(a.a),y=E(a.b);return norm({n:K(mp(x.n,y.n)),d:K(mp(x.d,y.d))},cb)}
+case'/':{const x=E(a.a),y=E(a.b);return norm({n:K(mp(x.n,y.d)),d:K(mp(x.d,y.n))},cb)}
+case'^':{const y=ev(a.b,true);if(!isC(y.d)||y.n.length>1||(y.n.length&&!isC(y.n)))throw Error('Integer lang ang kayang exponent.');
+const e=y.n.length?fv(y.n[0].c):0;if(!Number.isInteger(e)||Math.abs(e)>30)throw Error('Integer lang (hanggang 30) ang kayang exponent.');
+let x=E(a.a);if(e<0)x={n:x.d,d:x.n};let r={n:one,d:one};for(let i=0;i<Math.abs(e);i++)r={n:K(mp(r.n,x.n)),d:K(mp(r.d,x.d))};return norm(r,cb)}}}
+function parse(s){
+s=s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]+/g,m=>'^'+[...m].map(c=>SUP.indexOf(c)).join('')).replace(/[−–—]/g,'-').replace(/[×·]/g,'*').replace(/÷/g,'/').replace(/[\[{]/g,'(').replace(/[\]}]/g,')').replace(/\s+/g,'');
+const tk=s.match(/\d+\.?\d*|\.\d+|[a-zA-Z]|./g)||[];let i=0;const pk=()=>tk[i],nx=()=>tk[i++];
+const imp=t=>t!==undefined&&/^[\d.a-zA-Z(]/.test(t);
+const ex=()=>{let a=tm();while(pk()=='+'||pk()=='-'){const o=nx();a={t:o,a,b:tm()}}return a};
+const tm=()=>{let a=un();for(;;){const t=pk();if(t=='*'){nx();a={t,a,b:un()}}else if(t=='/'){nx();let b=un();while(imp(pk()))b={t:'*',a:b,b:pw()};a={t,a,b}}else if(imp(t))a={t:'*',a,b:pw()};else return a}};
+const un=()=>{if(pk()=='-'){nx();return{t:'neg',a:un()}}if(pk()=='+'){nx();return un()}return pw()};
+const pw=()=>{const b=at();if(pk()=='^'){nx();return{t:'^',a:b,b:ue()}}return b};
+const ue=()=>{if(pk()=='-'){nx();return{t:'neg',a:ue()}}if(pk()=='+')nx();return pw()};
+const at=()=>{const t=nx();if(t===undefined)throw Error('Kulang ang expression.');
+if(t=='('){const e=ex();if(nx()!=')')throw Error('May kulang na pansarang panaklong “)”.');return e}
+if(/^[\d.]/.test(t)){const[w,f='']=t.split('.');return{t:'n',v:F(+(w+f),10**f.length)}}
+if(/^[a-zA-Z]$/.test(t))return{t:'v',v:t};throw Error('Hindi ko maintindihan ang “'+t+'”.')};
+const r=ex();if(i<tk.length)throw Error('Hindi ko maintindihan ang “'+tk[i]+'”.');return r}
+const nv=(a,x)=>{const E=q=>nv(q,x);switch(a.t){case'n':return fv(a.v);case'v':return x;case'neg':return-E(a.a);case'+':return E(a.a)+E(a.b);case'-':return E(a.a)-E(a.b);case'*':return E(a.a)*E(a.b);case'/':return E(a.a)/E(a.b);case'^':return E(a.a)**E(a.b)}};
+const nf=x=>isFinite(x)?String(+x.toFixed(4)):'hindi defined';
+const vars=P=>[...new Set(P.flatMap(t=>Object.keys(t.v)))].sort();
+const cf=(P,v)=>{const a=Array(Math.max(0,...P.map(t=>t.v[v]||0))+1).fill(Z);P.forEach(t=>{const e=t.v[v]||0;a[e]=fa(a[e],t.c)});return a};
+const cs=(c,v)=>ps(c.map((x,k)=>({c:x,v:k?{[v]:k}:{}})).filter(t=>t.c.n).reverse());
+const ci=(c,v)=>cs(c.map(x=>F(x)),v);
+function toIntC(a){const L=a.reduce((s,c)=>lcm(s,c.d),1),r=a.map(c=>c.n*L/c.d);let g=r.reduce((s,c)=>gcd(s,c),0)||1;if(r[r.length-1]<0)g=-g;return{ints:r.map(c=>c/g),k:F(g,L)}}
+const divs=n=>{n=Math.abs(n);const r=[];for(let i=1;i*i<=n;i++)if(n%i==0){r.push(i);if(i*i!=n)r.push(n/i)}return r.sort((a,b)=>a-b)};
+const isRoot=(c,p,q)=>{const n=c.length-1;let s=0;for(let k=0;k<=n;k++)s+=c[k]*p**k*q**(n-k);return s==0};
+function findRoot(c){const n=c.length-1;if(Math.abs(c[0])>1e12)return null;for(const q of divs(c[n]))for(const p of divs(c[0]))if(gcd(p,q)==1)for(const s of[1,-1])if(isRoot(c,s*p,q))return F(s*p,q);return null}
+const sdiv=(c,r)=>{const n=c.length-1,q=Array(n);let acc=Z;for(let k=n;k>=1;k--){acc=fa(fm(acc,r),F(c[k]));q[k-1]=acc}return q};
+const lin=(r,v)=>`${r.d==1?'':r.d}${v}`+(r.n>0?' − '+r.n:r.n<0?' + '+(-r.n):'');
+const sq=D=>{let k=1,m=D;for(let i=2;i*i<=m;i++)while(m%(i*i)==0){m/=i*i;k*=i}return[k,m]};
+function dk(c){const n=c.length-1,a=c.map(x=>x/c[n]),rad=1+Math.abs(a[0])**(1/n);
+const z=[...Array(n)].map((_,k)=>[rad*Math.cos(2*Math.PI*k/n+.4),rad*Math.sin(2*Math.PI*k/n+.4)]);
+const mu=(p,q)=>[p[0]*q[0]-p[1]*q[1],p[0]*q[1]+p[1]*q[0]],dv=(p,q)=>{const d=q[0]**2+q[1]**2;return[(p[0]*q[0]+p[1]*q[1])/d,(p[1]*q[0]-p[0]*q[1])/d]};
+for(let it=0;it<500;it++)for(let j=0;j<n;j++){let p=[1,0];for(let k=n-1;k>=0;k--){p=mu(p,z[j]);p[0]+=a[k]}
+let d=[1,0];for(let k=0;k<n;k++)if(k!=j)d=mu(d,[z[j][0]-z[k][0],z[j][1]-z[k][1]]);const q=dv(p,d);z[j]=[z[j][0]-q[0],z[j][1]-q[1]]}return z}
+function quad(c,v,S,R){const[c0,B,A]=c,D=B*B-4*A*c0;
+S.push([`Quadratic equation: ${ci(c,v)} = 0`,`a = ${A}, b = ${B}, c = ${c0}`,`Discriminant: D = b² − 4ac = (${B})² − 4(${A})(${c0}) = ${D}`]);
+const sg=D>0?'D > 0 → dalawang magkaibang real na solusyon':D==0?'D = 0 → isang (doble) na solusyon':'D < 0 → dalawang complex na solusyon';
+const fo=`${v} = (−b ± √D) / 2a = (−(${B}) ± √${D}) / ${2*A}`;
+if(D>=0&&Number.isInteger(Math.sqrt(D))){const s=Math.sqrt(D),r1=F(-B+s,2*A),r2=F(-B-s,2*A);
+S.push([sg,fo.replace(/√-?\d+$/,'√'+D)+` = (${-B} ± ${s}) / ${2*A}`,`${v}₁ = ${fs(r1)}, ${v}₂ = ${fs(r2)}`]);R.push({t:v+' = '+fs(r1),x:fv(r1)});if(D)R.push({t:v+' = '+fs(r2),x:fv(r2)})}
+else if(D>0){const[k,m]=sq(D),g=gcd(gcd(B,k),2*A),den=2*A/g,nb=-B/g,kk=k/g,rad=(kk==1?'':kk)+'√'+m;
+const rt=sn=>{const n=nb?`${mn(nb)}${sn>0?' + ':' − '}${rad}`:(sn>0?'':'−')+rad;return den==1?n:`${nb?'('+n+')':n} / ${den}`};
+const val=sn=>(-B+sn*Math.sqrt(D))/(2*A);
+S.push([sg,fo,`√${D} = ${k>1?k+'√'+m:'√'+m}`,`${v}₁ = ${rt(1)} ≈ ${nf(val(1))}`,`${v}₂ = ${rt(-1)} ≈ ${nf(val(-1))}`]);
+R.push({t:`${v} = ${rt(1)} ≈ ${nf(val(1))}`,x:val(1)},{t:`${v} = ${rt(-1)} ≈ ${nf(val(-1))}`,x:val(-1)})}
+else{const re=F(-B,2*A),[k,m]=sq(-D),g=gcd(k,2*A),im=m==1?(k/g==2*A/g?'':F(k,2*A).n==k/g&&0?'':fs(F(k,2*A))):`${k/g==1?'':k/g}√${m}${2*A/g==1?'':' / '+2*A/g}`;
+const t=`${v} = ${re.n?fs(re)+' ± ':'± '}${im.includes('/')&&m!=1?'('+im+')':im}i`;
+S.push([sg,fo,`√(${D}) = i√${-D}`,t]);R.push({t,x:null})}}
+function high(c,v,S){const R=[];let k0=0;
+while(c.length>1&&c[0]==0){c=c.slice(1);k0++}
+if(k0){const xv=v+(k0>1?sup(k0):'');S.push([`I-factor out ang ${xv}`,`Walang constant term kaya: ${xv}(${ci(c,v)}) = 0`,`Isa sa mga solusyon: ${v} = 0`]);R.push({t:v+' = 0',x:0})}
+while(c.length>3){const r=findRoot(c);if(!r)break;const q=toIntC(sdiv(c,r)).ints;
+S.push([`Rational Root Theorem: subukan ang ${v} = ${fs(r)}`,`P(${fs(r)}) = 0 ✓ kaya (${lin(r,v)}) ay factor`,`Synthetic division → ${ci(q,v)} = 0`]);R.push({t:v+' = '+fs(r),x:fv(r)});c=q}
+if(c.length==3)quad(c,v,S,R);
+else if(c.length==2){const r=F(-c[0],c[1]);S.push([`Linear na lang ang natira: ${ci(c,v)} = 0`,`${v} = ${fs(r)}`]);R.push({t:v+' = '+fs(r),x:fv(r)})}
+else if(c.length>3){const z=dk(c),L=[];S.push([`Walang natitirang rational root sa ${ci(c,v)} = 0`,'Gagamit ng numerical method (Durand–Kerner) para sa approximate na sagot.']);
+z.forEach(p=>{const real=Math.abs(p[1])<1e-7,t=real?`${v} ≈ ${nf(p[0])}`:`${v} ≈ ${nf(p[0])} ${p[1]<0?'−':'+'} ${nf(Math.abs(p[1]))}i`;R.push({t,x:real?p[0]:null})})}
+return R}
+function solveEq(L0,R0,S){
+if(!L0.trim()||!R0.trim())throw Error('Kulang ang isang side ng equation.');
+const A=parse(L0),B=parse(R0),uL=ev(A,false),uR=ev(B,false),cL=ev(A,true),cR=ev(B,true);
+S.push(['Ang equation',L0.trim()+' = '+R0.trim()]);
+if(/[()]/.test(L0+R0))S.push(['Alisin ang panaklong (i-distribute / i-expand)',rs(uL)+' = '+rs(uR)]);
+const dt=(u,c)=>{if(!isOne(u.d)||u.n.length<=c.n.length)return[];const m=new Map();u.n.forEach(t=>{const k=key(t.v);m.set(k,(m.get(k)||[]).concat(t))});return[...m.values()].filter(g=>g.length>1).map(g=>`${ps(g)} = ${ps(C(g))}`)};S.push(['Pagsamahin ang magkatulad na term',...dt(uL,cL).map(x=>'Kaliwa: '+x),...dt(uR,cR).map(x=>'Kanan: '+x),rs(cL)+' = '+rs(cR)]);let P;
+if(isOne(cL.d)&&isOne(cR.d))P=C(cL.n.concat(cR.n.map(neg)));
+else{S.push(['Alisin ang denominator (i-cross multiply)',`(${ps(cL.n)})(${ps(cR.d)}) = (${ps(cR.n)})(${ps(cL.d)})`]);
+const l=C(mp(cL.n,cR.d)),r=C(mp(cR.n,cL.d));S.push(['I-expand at pagsamahin',ps(l)+' = '+ps(r)]);P=C(l.concat(r.map(neg)))}
+S.push(['Ilipat lahat sa kaliwa (gawing = 0)',ps(P)+' = 0']);
+if(!P.length){S.push(['Sagot','Palaging totoo ang equation → walang hanggang solusyon (identity).']);return}
+const vs=vars(P);
+if(!vs.length){S.push(['Sagot','Hindi kailanman totoo ang equation → walang solusyon.']);return}
+if(vs.length>1)throw Error('Isang variable lang ang kayang i-solve sa equation sa ngayon (nakita: '+vs.join(', ')+').');
+const v=vs[0],c=cf(P,v);let R=[];
+if(c.length==2){const a=c[1],b=c[0],r=fm(fng(b),fi(a));
+const at=ps([{c:a,v:{[v]:1}}]),ab=fs(b.n>0?b:fng(b)),sg=b.n>0?['+','−']:['−','+'];S.push(...(b.n?[[`Ilipat ang constant: ${b.n>0?'bawasan':'dagdagan'} ng ${ab} ang magkabilang side`,`${at} ${sg[0]} ${ab} ${sg[1]} ${ab} = 0 ${sg[1]} ${ab}`,`${at} = ${fs(fng(b))}`]]:[]),[`I-divide ang magkabilang side sa coefficient ng ${v} (${fs(a)})`,`${at} / ${fs(a)} = ${fs(fng(b))} / ${fs(a)}`,`${v} = ${fs(r)}`]);R.push({t:v+' = '+fs(r),x:fv(r)})}
+else{const{ints,k}=toIntC(c);if(!(k.n==1&&k.d==1))S.push(['Gawing pinakasimpleng integer ang coefficients',ci(ints,v)+' = 0']);R=high(ints,v,S)}
+R=R.filter((r,i)=>R.findIndex(q=>q.t==r.t)==i);const good=[],ln=[];
+for(const r of R){if(r.x==null){good.push(r);continue}
+const l=nv(A,r.x),q=nv(B,r.x),ok=isFinite(l)&&isFinite(q)&&Math.abs(l-q)<=1e-6*Math.max(1,Math.abs(l),Math.abs(q));
+ln.push(`${v} = ${nf(r.x)}: kaliwa = ${nf(l)}, kanan = ${nf(q)} ${ok?'✓':'✗ (extraneous, hindi tinatanggap)'}`);if(ok)good.push(r)}
+if(ln.length)S.push(['I-check: palitan ang '+v+' sa orihinal na equation',...ln]);
+S.push(['Sagot',...(good.length?good.map(r=>r.t):['Walang tamang solusyon.'])])}
+function simp(src,S){const A=parse(src),u=ev(A,false),c=ev(A,true);S.push(['Ang expression',src.trim()]);
+if(/[()]/.test(src))S.push(['Alisin ang panaklong (i-distribute / i-expand)',rs(u)]);
+if(isOne(u.d)&&u.n.length>c.n.length){const m=new Map();u.n.forEach(t=>{const k=key(t.v);m.set(k,(m.get(k)||[]).concat(t))});
+const gs=[...m.values()].sort((a,b)=>deg(b[0])-deg(a[0]));S.push(['I-group ang magkatulad na term',gs.map(g=>{const s=ps(g);return g.length>1||s[0]=='−'?'('+s+')':s}).join(' + ')],['Pagsamahin ang coefficients sa bawat group',...gs.map(g=>g.length>1?`${ps(g)} = ${ps(C(g))}`:`${ps(g)}  (walang kapares)`),'Pinagsamang resulta: '+ps(c.n)])}
+if(!isOne(u.d)){S.push(['Isulat bilang fraction',rs(u)]);const un_=C(u.n),ud=C(u.d);
+if(un_.length==1&&ud.length==1){const cn=un_[0],cd=ud[0],L=[`Coefficients: ${fs(cn.c)} ÷ ${fs(cd.c)} = ${fs(fm(cn.c,fi(cd.c)))}`],P=(x,e)=>e==0?'1':x+(e>1?sup(e):'');
+[...new Set([...Object.keys(cn.v),...Object.keys(cd.v)])].sort().forEach(x=>{const a=cn.v[x]||0,b=cd.v[x]||0,df=a-b;L.push(`${x}: ${P(x,a)} ÷ ${P(x,b)} = ${x}^(${a} − ${b}) = ${df==0?'1':df>0?P(x,df):'1/'+P(x,-df)}`)});
+S.push(['I-divide ang coefficients at bawasan ang exponents (aᵐ ÷ aⁿ = aᵐ⁻ⁿ)',...L])}
+else S.push(['I-cancel ang common factor ng numerator at denominator',rs(c)])}
+S.push(['Sagot',rs(c)])}
+const pre=k=>k.d==1?(k.n==1?'':k.n==-1?'−':mn(k.n)):'('+fs(k)+')';
+function fact(P,L){if(!P.length)return'0';const vs=vars(P);if(!vs.length)return ps(P);
+if(vs.length>1){const{ints,k}=toIntC(P.map(t=>t.c)),mono={};vs.forEach(x=>{const m=Math.min(...P.map(t=>t.v[x]||0));if(m)mono[x]=m});
+const rest=P.map((t,i)=>{const v={...t.v};for(const x in mono){v[x]-=mono[x];if(!v[x])delete v[x]}return{c:F(ints[i]),v}});
+L.push('Common factor: '+(pre(k)+(Object.keys(mono).length?ps([{c:O,v:mono}]):'')||'wala'));return pre(k)+(Object.keys(mono).length?ps([{c:O,v:mono}]):'')+'('+ps(rest)+')'}
+const v=vs[0];let{ints:c,k}=toIntC(cf(P,v)),z=0;while(c.length>1&&c[0]==0){c=c.slice(1);z++}
+if(!(k.n==1&&k.d==1)||z)L.push('Common factor: '+pre(k)+(z?v+(z>1?sup(z):''):''));
+const f=[];while(c.length>1){const r=findRoot(c);if(!r)break;const q=toIntC(sdiv(c,r));L.push(`P(${fs(r)}) = 0 → factor: (${lin(r,v)})`);k=fm(fm(k,q.k),F(1,r.d));c=q.ints;f.push(lin(r,v))}
+let rest='';if(c.length==1)k=fm(k,F(c[0]));else{rest=ci(c,v);L.push(`Ang ${rest} ay hindi na ma-factor gamit ang rational numbers.`)}
+const g={};f.forEach(x=>g[x]=(g[x]||0)+1);
+return pre(k)+(z?v+(z>1?sup(z):''):'')+Object.entries(g).map(([x,n])=>`(${x})${n>1?sup(n):''}`).join('')+(rest?`(${rest})`:'')||'1'}
+function factor(src,S){const c=ev(parse(src),true);S.push(['Ang expression',src.trim()],['Pinasimpleng anyo',rs(c)]);const L=[];
+if(!isOne(c.d)){const a=fact(c.n,L),b=fact(c.d,L);S.push(['Mga hakbang sa pag-factor',...L],['Sagot',`(${a}) / (${b})`])}
+else{const a=fact(c.n,L);S.push(['Mga hakbang sa pag-factor',...(L.length?L:['Walang mahanap na common factor o rational root.'])],['Sagot',a])}}
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const q=document.getElementById('q'),out=document.getElementById('out');
+function run(mode){const src=q.value.trim(),S=[];let err='';
+try{if(!src)throw Error('Mag-type muna ng expression o equation.');const p=src.split('=');
+if(p.length>2)throw Error('Isa lang dapat ang “=”.');
+if(mode=='f'){if(p.length==2)throw Error('Expression lang ang kayang i-factor. Gamitin ang “I-solve” para sa equation.');factor(src,S)}
+else p.length==2?solveEq(p[0],p[1],S):simp(src,S)}catch(e){err=e.message||'May error.'}
+out.innerHTML=err?`<div class="s er"><div class="t">May problema</div><div class="m">${esc(err)}</div></div>`:`<div class="lbl">Step-by-step na solusyon</div><div class="tl">`+S.map((s,i)=>{const a=s[0]=='Sagot';return a?`<div class="s ans"><div class="t">✔ Sagot</div>${s.slice(1).map(l=>`<div class="m">${esc(l)}</div>`).join('')}</div>`:`<div class="s"><span class="n">${i+1}</span><div class="t">${esc(s[0])}</div>${s.slice(1).map(l=>`<div class="m">${esc(l)}</div>`).join('')}</div>`}).join('')+`</div>`}
+document.getElementById('go').onclick=()=>run('s');document.getElementById('fa').onclick=()=>run('f');
+q.addEventListener('keydown',e=>{if(e.key=='Enter')run('s')});
+
+</script></main></body></html>
